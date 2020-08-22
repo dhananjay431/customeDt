@@ -13,7 +13,8 @@ export class CustomersListComponent implements OnInit {
   obi$: Observable<any>;
   data: any = {
     row: 10,
-    page: 2
+    page: 2,
+    search:""
   };
   tableData = [];
   x = false;
@@ -61,24 +62,33 @@ export class CustomersListComponent implements OnInit {
   change(id, data) {
     let vm = this;
     if (id == 'row') {
-      this.data = {
-        row: data,
-        page: 1
-      };
+      
+      this.data.row = data;
+        this.data.page = 1;
     }
     if (id == 'page') {
       this.data.page = data;
     }
+
+    if (id == 'search') {
+      this.data.row = 10;
+      this.data.page = 1;
+      
+      ((data)=>{
+        console.log("search=>",data);
+        vm.ob$.next(data);
+      })(this.tableData.filter(d =>{
+        return d.product.match(RegExp(vm.data.search,'i'))
+     }))
+
+
+    }
     if (id == 'btn') {
-      this.data = {
-        row: 10,
-        page: 1
-      };
+        this.data.row = 10;
+        this.data.page = 1;
       vm.load(vm.ajax()).subscribe(resp => {
         vm.ob$.next(resp)
       })
-    } else {
-      vm.ob$.next(vm.tableData)
     }
     console.log("dd show=>", this.data);
   }

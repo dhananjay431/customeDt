@@ -1,10 +1,13 @@
 
 <div id="loader" *ngIf="x"></div>
 <div class="container-fluid">
-  <div class="row">
+  <div class="row mt-4">
     <div class="col-4">
       <div class="form-group">
         <select class="form-control" [(ngModel)]="data.row" (change)="change('row',data.row)">
+          <option [value]="2">2</option>
+          <option [value]="4">4</option>
+          <option [value]="8">8</option>
           <option [value]="10">10</option>
           <option [value]="20">20</option>
           <option [value]="30">30</option>
@@ -23,9 +26,24 @@
       </ul> -->
     </div>
     <div class="col-4 text-right">
-      <button type="button"  class="btn btn-primary" (click)="change('btn',0)">
+        <table class="w-100">
+            <tr>
+                <td>
+                    <div class="form-group">
+                        
+                        <input type="text"
+                          class="form-control" [(ngModel)]="data.search" placeholder="Search" (keyup)="change('search',data.search)">
+                      </div>
+                </td>
+                <td>
+                    <button type="button"  class="btn btn-primary" (click)="change('btn',0)">
         change
       </button>
+                </td>
+            </tr>
+        </table>
+        
+      
     </div>
   </div>
   
