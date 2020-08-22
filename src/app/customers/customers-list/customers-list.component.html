@@ -1,0 +1,51 @@
+
+<div id="loader" *ngIf="x"></div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-4">
+      <div class="form-group">
+        <select class="form-control" [(ngModel)]="data.row" (change)="change('row',data.row)">
+          <option [value]="10">10</option>
+          <option [value]="20">20</option>
+          <option [value]="30">30</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-4">
+      <div class="form-group">
+        <select class="form-control" [(ngModel)]="data.page" (change)="change('page',data.page)">
+          <option  *ngFor="let d of  pagi(tableData.length/data.row)" [value]="d"> {{d}}</option>
+        </select>
+      </div>
+
+      <!-- <ul>
+        <li *ngFor="let d of  pagi(tableData.length/data.row)" (click)="change('page',d)">  {{d}}</li>
+      </ul> -->
+    </div>
+    <div class="col-4 text-right">
+      <button type="button"  class="btn btn-primary" (click)="change('btn',0)">
+        change
+      </button>
+    </div>
+  </div>
+  
+  
+  
+  <table class="table w-100">
+    <thead class="thead-inverse">
+      <tr>
+        <th>product</th>
+        <th>firstName</th>
+        <th>lastName</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of show((obi$ | async))">
+          <td scope="row"> {{d.product }}</td>
+          <td> {{d.user.firstName}}</td>
+          <td> {{d.user.lastName}}</td>
+        </tr>
+      </tbody>
+  </table>  
+
+</div>
