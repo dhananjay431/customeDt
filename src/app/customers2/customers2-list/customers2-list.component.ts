@@ -21,9 +21,13 @@ export class Customers2ListComponent implements OnInit {
   persons1:any;
   persons2:any;
   persons3 :any = {
-    data:[]
+    data:[],
+      recordsTotal:0,
+  recordsFiltered:0
   };
+  data3:any;
   constructor(private http:HttpClient,private hero:HeroService) { }
+
 
   displayToConsole(): void {
     this.dtElements.forEach((dtElement: DataTableDirective, index: number) => {
@@ -36,7 +40,7 @@ export class Customers2ListComponent implements OnInit {
 
   ngOnInit(): void {
 
-
+    this.data3 = this.hero.data;
     let that = this;
     this.dtOption1 = {
       pagingType: 'full_numbers',
@@ -83,10 +87,13 @@ export class Customers2ListComponent implements OnInit {
 
     this.http.get("http://jsonresp.herokuapp.com/datatable/10").pipe(
       tap(d => {
+
         that.persons3 = d;
+        console.log("that.persons3 init =>",that.persons3)
       } )
     ).subscribe(resp =>{
-       that.dt3 = that.hero.get(resp);
+       that.dt3 = that.hero.getrx(resp);
+
     })
 
     that.dtOption3 = {
@@ -97,12 +104,15 @@ export class Customers2ListComponent implements OnInit {
       ajax: (dataTablesParameters: any, callback) => {
         
       console.log("that.persons3 in ajax=>",that.persons3)
+        that.dt3.ob.next(that.persons3);
         that.persons3 = that.persons3;
+        
         callback({
-          recordsTotal: that.persons3.length,
-          recordsFiltered: that.persons3.length,
+          recordsTotal: that.persons3.recordsTotal,
+          recordsFiltered: that.persons3.recordsFiltered,
           data: []
         });
+        
       },
    //   columns: [{ data: 'id' }, { data: 'firstName' }, { data: 'lastName' }]
     };

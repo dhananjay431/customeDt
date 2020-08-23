@@ -1,3 +1,7 @@
+<h1>
+    Date3 = {{  (data3.obo | async)  | json   }}
+</h1>
+
 <table id="first-table" datatable [dtOptions]="dtOptions[0]" class="row-border hover">
     <thead class="thead-inverse">
         <tr>
@@ -38,11 +42,15 @@
           <th>lastName</th>
         </tr>
         </thead>
-        <tbody *ngIf="persons3.data.length > 0">
-          <tr *ngFor="let d of persons3.data">
+        <tbody>
+          <tr *ngFor="let d of (dt3.obo | async).data">
             <td scope="row"> {{d.product }}</td>
             <td> {{d.user.firstName}}</td>
             <td> {{d.user.lastName}}</td>
           </tr>
         </tbody>
 </table>
+<pre>
+    {{ (dt3.obo | async) | json }}
+</pre>
+

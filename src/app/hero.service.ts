@@ -1,15 +1,18 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+declare var _:any;
 @Injectable({
   providedIn: 'root'
 })
-export class HeroService {
+export class HeroService  {
 
   constructor() { }
-  get(data){
+  getrx(data){
     let ob = new BehaviorSubject(data);
     let obo = ob.asObservable();
-    return {ob,obo};
+    return {ob:ob,obo:obo};
  }
-  
+    data = this.getrx({});
+    
+
 }
