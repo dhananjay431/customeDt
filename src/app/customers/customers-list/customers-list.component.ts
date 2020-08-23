@@ -22,7 +22,7 @@ export class CustomersListComponent implements OnInit {
     data:[],
     search:""
   };
-
+  tbl2DataClone:any;
   constructor(private hero:HeroService){}
   ajax() {
     let vm = this;
@@ -40,35 +40,53 @@ export class CustomersListComponent implements OnInit {
     );
   } */
 
-  tbl2show(data){
+  tbl2show(data,flag){
+
+
     console.log("tbl2=>",data);
     let vm = this;
-    let d =  _.cloneDeep(this.tbl2Data)
-    if(d.search != ""){
-      d.data = d.data.filter(x =>{
-        return x.product.match(RegExp(d.search,"i"));
-     })
-     d.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
-     vm.tbl2.ob.next(d);
-     return d.data;
-    }else{
-      
-      d.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
-      vm.tbl2.ob.next(d);
-      return d.data;
+    if(flag != 'pages')
+    {
+       data.pages = 1;
     }
-    ;
+
+
+    
+      console.log("subscribe=>",data);
+      
+      //vm.tbl2Data.data = _.cloneDeep(vm.tbl2DataClone).data;
+
+      let d =  _.cloneDeep(vm.tbl2DataClone);
+      if(data.search != ""){
+        
+        d.data = d.data.filter(x =>{
+          return x.product.match(RegExp(data.search,"i"));
+       })
+
+       vm.tbl2Data.total = d.data.length;
+       vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+       
+      }else{
+        vm.tbl2Data.total = d.data.length;
+        vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+        
+        //vm.tbl2.ob.next(d);
+      }
+
+    
   }
   refresh(){
     let vm = this;
     vm.ajax().subscribe(s =>{
-        s.row = 10;
+        s.row = 2;
         s.pages = 1;
         s.total = s.data.length;
         s.data = s.data;
         s.search = "";
-        vm.tbl2Data = s;
-      vm.tbl2 = vm.hero.getrx(s);
+        //vm.tbl2Data = _.cloneDeep(s);
+        vm.tbl2DataClone = _.cloneDeep(s);
+        vm.tbl2show(vm.tbl2Data,"table");
+      // /vm.tbl2 = vm.hero.getrx(s);
     })
   }
   pre(data){
