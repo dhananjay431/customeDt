@@ -14,9 +14,7 @@ function getobo(data){
 export class HeroService  {
   constructor() { }
   getrx(data){
-    return ((data)=>{
-      return {ob:data,obo:getobo(data)};
-    })(getob(data))
+    return ((d)=>{ return {ob:d,obo:getobo(d)}; })(getob(data))
   }
   data = this.getrx({});
 }

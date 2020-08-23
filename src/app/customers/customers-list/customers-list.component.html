@@ -1,4 +1,4 @@
-
+<!-- 
 <div id="loader" *ngIf="x"></div>
 
   <div class="row mt-4">
@@ -21,9 +21,6 @@
         </select>
       </div>
 
-      <!-- <ul>
-        <li *ngFor="let d of  pagi(tableData.length/data.row)" (click)="change('page',d)">  {{d}}</li>
-      </ul> -->
     </div>
     <div class="col-4 text-right">
         <table class="w-100">
@@ -59,6 +56,51 @@
       </thead>
       <tbody>
         <tr *ngFor="let d of show((obi$ | async))">
+          <td scope="row"> {{d.product }}</td>
+          <td> {{d.user.firstName}}</td>
+          <td> {{d.user.lastName}}</td>
+        </tr>
+      </tbody>
+  </table>   -->
+
+<h1> table2 </h1>
+<button type="button" name="" id="" class="btn btn-primary" (click)="refresh()">
+  refresh
+</button>
+<div class="form-group">
+  <label for="">search</label>
+  <input type="text"
+  [(ngModel)]="tbl2Data.search"
+  (keyup)="tbl2show(tbl2Data)"
+    class="form-control" 
+     aria-describedby="helpId" 
+     placeholder="search">
+  <small id="helpId" class="form-text text-muted">Help text</small>
+</div>
+<select [(ngModel)]="tbl2Data.row" (change)="tbl2show(tbl2Data)">
+  <option [value]="2">2</option>
+  <option [value]="4">4</option>
+  <option [value]="10">10</option>
+  <option [value]="20">20</option>
+  <option [value]="30">30</option>
+  <option [value]="40">40</option>
+</select>
+<nav aria-label="Page navigation example">
+  <ul class="pagination">
+    <li class="page-item" *ngIf="tbl2Data.pages > 1" (click)="tbl2show(pre(tbl2Data))"><a class="page-link" >Previous</a></li>
+    <li class="page-item" *ngIf="tbl2Data.pages  < (tbl2Data.data.length / tbl2Data.row)" (click)="tbl2show(next(tbl2Data))"><a class="page-link" >Next</a></li>
+  </ul>
+</nav>
+  <table class="table w-100">
+    <thead class="thead-inverse">
+      <tr>
+        <th>product</th>
+        <th>firstName</th>
+        <th>lastName</th>
+      </tr>
+      </thead>
+      <tbody *ngIf="tbl2.obo">
+        <tr *ngFor="let d of tbl2show(tbl2.obo | async)">
           <td scope="row"> {{d.product }}</td>
           <td> {{d.user.firstName}}</td>
           <td> {{d.user.lastName}}</td>

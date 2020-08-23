@@ -12,3 +12,21 @@
 <h1>
     Date3 = {{  (data3.obo | async)  | json   }}
 </h1>
+
+
+<table datatable [dtOptions]="dtOptions" class="row-border hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First name</th>
+        <th>Last name</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="(getData | async) as dd">
+      <tr *ngFor="let d of dd">
+        <td>{{d.product}}</td>
+        <td>{{d.city}}</td>
+        <td>{{d.user.firstName}}</td>
+      </tr>
+    </tbody>
+  </table>

@@ -2,96 +2,87 @@
 import { Component, OnInit } from '@angular/core';
 import { BehaviorSubject, Observable, from, Subject, of } from 'rxjs';
 import { map, tap, switchMap, finalize, take } from "rxjs/operators";
+import { HeroService } from 'src/app/hero.service';
+import { _ParseAST } from '@angular/compiler';
+declare var _:any;
 @Component({
   selector: 'app-customers-list',
   templateUrl: './customers-list.component.html',
   styleUrls: ['./customers-list.component.scss']
 })
 export class CustomersListComponent implements OnInit {
-  title = 'customeDt';
-  ob$: Subject<any>;
-  obi$: Observable<any>;
-  data: any = {
-    row: 10,
-    page: 2,
+
+  tbl2:any = {
+    ob:"",obo:false
+  }
+  tbl2Data = {
+    row:10,
+    pages:0,
+    total:0,
+    data:[],
     search:""
   };
-  tableData = [];
-  x = false;
+
+  constructor(private hero:HeroService){}
   ajax() {
     let vm = this;
     return from(fetch('http://jsonresp.herokuapp.com/datatable/95')
-      .then(response => response.json())).pipe(
-        map(d => d.data),
-        tap((d) => {
-          vm.tableData = d;
-        })
-      )
+      .then(response => response.json()));
+    
   }
-  pagi(dta) {
-    let x = Array.from(Array(Math.round(dta)), (_, i) => i + 1);
-    return x;
-  }
-  show(data) {
-    let start = ((Math.round(Number(this.data.page) - 1) * 10));
-    console.log(start + 1, start + Math.round(Number(this.data.row)));
-    return data.slice(start + 1, start + Math.round(Number(this.data.row)))
-  }
-  load(ob) {
+
+/*   load(ob) {
     let vm = this;
     return of([]).pipe(
       tap(() => { vm.x = true; }),
       switchMap(() => ob),
       finalize(() => { vm.x = false; })
     );
-  }
-  ngOnInit() {
+  } */
 
-
+  tbl2show(data){
+    console.log("tbl2=>",data);
     let vm = this;
-
-    vm.data = {
-      row: 10,
-      page: 1
+    let d =  _.cloneDeep(this.tbl2Data)
+    if(d.search != ""){
+      d.data = d.data.filter(x =>{
+        return x.product.match(RegExp(d.search,"i"));
+     })
+     d.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+     vm.tbl2.ob.next(d);
+     return d.data;
+    }else{
+      
+      d.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+      vm.tbl2.ob.next(d);
+      return d.data;
     }
-    this.ajax().subscribe(r => {
-      vm.ob$ = new BehaviorSubject(r);
-      vm.obi$ = this.ob$.asObservable();
+    ;
+  }
+  refresh(){
+    let vm = this;
+    vm.ajax().subscribe(s =>{
+        s.row = 10;
+        s.pages = 1;
+        s.total = s.data.length;
+        s.data = s.data;
+        s.search = "";
+        vm.tbl2Data = s;
+      vm.tbl2 = vm.hero.getrx(s);
     })
   }
-  change(id, data) {
-    let vm = this;
-    if (id == 'row') {
-      
-      this.data.row = data;
-        this.data.page = 1;
-    }
-    if (id == 'page') {
-      this.data.page = data;
-    }
-
-    if (id == 'search') {
-      this.data.row = 10;
-      this.data.page = 1;
-      
-      ((data)=>{
-        console.log("search=>",data);
-        vm.ob$.next(data);
-      })(this.tableData.filter(d =>{
-        return d.product.match(RegExp(vm.data.search,'i'))
-     }))
-
-
-    }
-    if (id == 'btn') {
-        this.data.row = 10;
-        this.data.page = 1;
-      vm.load(vm.ajax()).subscribe(resp => {
-        vm.ob$.next(resp)
-      })
-    }
-    console.log("dd show=>", this.data);
+  pre(data){
+    data.pages -= 1;
+     return data;
   }
+  next(data){
+    data.pages += 1;
+     return data;
+  }
+  ngOnInit() {
+      this.refresh();
+  }
+
 
 }
 

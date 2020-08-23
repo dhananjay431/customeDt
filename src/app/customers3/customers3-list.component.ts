@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { HeroService } from '../hero.service';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+
 
 @Component({
   selector: 'app-customers3-list',
@@ -9,13 +10,19 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class Customers3ListComponent implements OnInit {
 
-  constructor(private hero:HeroService) { }
+  dtOptions: DataTables.Settings = {};
+
+
+  constructor(private hero:HeroService,private http:HttpClient) { }
   
   data:any = {ob:"",obo:""};
   data2:any;
   data3:any;
-
+  getData:any;
   ngOnInit(): void {
+       this.dtOptions = {
+      pagingType: 'full_numbers'
+    };
     let that = this;
     this.data = this.hero.getrx({date:new Date().getTime()});
     // setInterval(()=>{
@@ -24,20 +31,13 @@ export class Customers3ListComponent implements OnInit {
 
     this.data2 = that.hero.getrx({nn:"sdfsf"});
     this.data3 = that.hero.data;
-
     this.data3.obo.subscribe(s =>{
       s.cus3 = new Date().getTime();
-        
       that.data3.ob.next(s);
-      //   fetch('http://jsonresp.herokuapp.com/datatable')
-      // .then(response => response.json())
-      // .then(json => {
-      //   s.dt = json;
-      //   that.data3.ob.next(s);
-      // })
-
     })
 
+     
+    that.getData = that.http.get("https://jsonresp.herokuapp.com/datatable/20");
 
   
     
