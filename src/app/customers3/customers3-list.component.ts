@@ -27,8 +27,18 @@ export class Customers3ListComponent implements OnInit {
 
     this.data3.obo.subscribe(s =>{
       s.cus3 = new Date().getTime();
-        that.data3.ob.next(s);
+        
+      that.data3.ob.next(s);
+      //   fetch('http://jsonresp.herokuapp.com/datatable')
+      // .then(response => response.json())
+      // .then(json => {
+      //   s.dt = json;
+      //   that.data3.ob.next(s);
+      // })
+
     })
+
+
   
     
 
