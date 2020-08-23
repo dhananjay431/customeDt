@@ -1,0 +1,48 @@
+<table id="first-table" datatable [dtOptions]="dtOptions[0]" class="row-border hover">
+    <thead class="thead-inverse">
+        <tr>
+          <th>product</th>
+          <th>firstName</th>
+          <th>lastName</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of persons1">
+            <td scope="row"> {{d.product }}</td>
+            <td> {{d.user.firstName}}</td>
+            <td> {{d.user.lastName}}</td>
+          </tr>
+        </tbody>
+</table>
+<table id="second-table" datatable [dtOptions]="dtOptions[1]" class="row-border hover">
+    <thead class="thead-inverse">
+        <tr>
+          <th>product</th>
+          <th>firstName</th>
+          <th>lastName</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of persons2">
+            <td scope="row"> {{d.product }}</td>
+            <td> {{d.user.firstName}}</td>
+            <td> {{d.user.lastName}}</td>
+          </tr>
+        </tbody>
+</table>
+<table id="second-table3" datatable [dtOptions]="dtOptions[2]" class="row-border hover">
+    <thead class="thead-inverse">
+        <tr>
+          <th>product</th>
+          <th>firstName</th>
+          <th>lastName</th>
+        </tr>
+        </thead>
+        <tbody *ngIf="persons3.data.length > 0">
+          <tr *ngFor="let d of persons3.data">
+            <td scope="row"> {{d.product }}</td>
+            <td> {{d.user.firstName}}</td>
+            <td> {{d.user.lastName}}</td>
+          </tr>
+        </tbody>
+</table>
