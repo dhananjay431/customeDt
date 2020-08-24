@@ -1,52 +1,51 @@
-<h1> table2 </h1>
-<button type="button" name="" id="" class="btn btn-primary" (click)="refresh()">
-  refresh
-</button>
-<div class="form-group">
-  <label for="">search</label>
-  <input type="text"
-  [(ngModel)]="tbl2Data.search"
-  (keyup)="tbl2show(tbl2Data,'search')"
-    class="form-control" 
-     aria-describedby="helpId" 
-     placeholder="search">
-  <small id="helpId" class="form-text text-muted">Help text</small>
-</div>
-<select [(ngModel)]="tbl2Data.row" (change)="tbl2show(tbl2Data,'row')">
-  <option [value]="2">2</option>
-  <option [value]="4">4</option>
-  <option [value]="10">10</option>
-  <option [value]="20">20</option>
-  <option [value]="30">30</option>
-  <option [value]="40">40</option>
-</select>
-<nav aria-label="Page navigation example">
-  <ul class="pagination">
-    <li class="page-item" *ngIf="tbl2Data.pages > 1" (click)="tbl2show(pre(tbl2Data),'pages')"><a class="page-link" >Previous</a></li>
-    <li class="page-item" *ngIf="tbl2Data.pages < (tbl2Data.total/tbl2Data.row)"  (click)="tbl2show(next(tbl2Data),'pages')"><a class="page-link" >Next</a></li>
-  </ul>
-</nav>
-  <table class="table w-100">
-    <thead class="thead-inverse">
-      <tr>
-        <th>#</th>
-        <th>product</th>
-        <th>firstName</th>
-        <th>lastName</th>
-      </tr>
-      </thead>
-      <tbody >
-        <tr *ngFor="let d of tbl2Data.data">
+<!-- {{  (sub.obo | async ) | json }} -->
 
-          <td scope="row"> 
-            <input type="checkbox" [(ngModel)]="d.flag" />
-          </td>
-          <td> {{d.product }}</td>
-          <td> {{d.user.firstName}}</td>
-          <td> {{d.user.lastName}}</td>
-        </tr>
-      </tbody>
-  </table>  
-  <pre>
-    {{ tbl2Data | json }}
-  </pre>
+ 
+  <div *ngIf="(sub.obo | async ) as d">
+    <div class="row">
+      <div class="col-4">
+        <div class="form-group">
+          <label for=""></label>
+          <select class="form-control" [(ngModel)]="d.row" (change)="change(d,'row')">
+            <option [value]="10">10</option>
+            <option [value]="20">20</option>
+            <option [value]="30">30</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-4"></div>
+      <div class="col-4"></div>
+      <div class="col-4"></div>
+    </div>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>product</th>
+            <th>city</th>
+            <th> #</th>
+            <th>firstName</th>
+          </tr>
+        </thead>
+        <tbody >
+          <tr *ngFor="let x of d.data">
+            <ng-template [ngIf]="x.flag">
+              <td scope="row"> {{x.product}}</td>
+              <td> <input type="checkbox" [(ngModel)]="x.flag" (change)="change(d)" /></td>
+              <td>{{x.city}}</td>
+              <td>{{x.user.firstName}}</td>
+            </ng-template>          
+          </tr>
+          <tr *ngFor="let x of d.data" class="bg-primary">
+            <ng-template [ngIf]="x.flag == false">
+              <td scope="row"> {{x.product}}</td>
+              <td> <input type="checkbox" [(ngModel)]="x.flag" (change)="change(d)" /></td>
+              <td>{{x.city}}</td>
+              <td>{{x.user.firstName}}</td>
+            </ng-template>          
+          </tr>
+        </tbody>
+      </table>
+  </div> 
+  
+  
+  

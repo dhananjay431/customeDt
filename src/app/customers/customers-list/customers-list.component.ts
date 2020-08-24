@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, from, Subject, of } from 'rxjs';
 import { map, tap, switchMap, finalize, take } from "rxjs/operators";
 import { HeroService } from 'src/app/hero.service';
 import { _ParseAST } from '@angular/compiler';
+import { HttpClient } from '@angular/common/http';
 declare var _:any;
 @Component({
   selector: 'app-customers-list',
@@ -22,8 +23,12 @@ export class CustomersListComponent implements OnInit {
     data:[],
     search:""
   };
+  sub:any = {
+    obo:false,
+    og:""
+  };
   tbl2DataClone:any;
-  constructor(private hero:HeroService){}
+  constructor(private hero:HeroService,private http:HttpClient){}
   ajax() {
     let vm = this;
     return from(fetch('http://jsonresp.herokuapp.com/datatable/95')
@@ -41,38 +46,30 @@ export class CustomersListComponent implements OnInit {
   } */
 
   tbl2show(data,flag){
-
-
+    data.data = data.data.map(function(d){  d.sh = false; return d;});
     console.log("tbl2=>",data);
     let vm = this;
     if(flag != 'pages')
     {
        data.pages = 1;
     }
-
-
-    
-      console.log("subscribe=>",data);
-      
-      //vm.tbl2Data.data = _.cloneDeep(vm.tbl2DataClone).data;
-
-      let d =  _.cloneDeep(vm.tbl2DataClone);
+      let d =  data.data;
       if(data.search != ""){
         
         d.data = d.data.filter(x =>{
           return x.product.match(RegExp(data.search,"i"));
-       })
+       }).map((d)=> {d.sh = true; return d});
 
        vm.tbl2Data.total = d.data.length;
-       vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+       vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row))).map((d)=> {d.sh = true; return d});
        
       }else{
         vm.tbl2Data.total = d.data.length;
-        vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row)));
+        vm.tbl2Data.data =  d.data.splice((data.pages - 1)*(data.row),( Number(data.row))).map((d)=> {d.sh = true; return d});
         
         //vm.tbl2.ob.next(d);
       }
-
+      return data;
     
   }
   refresh(){
@@ -83,8 +80,8 @@ export class CustomersListComponent implements OnInit {
         s.total = s.data.length;
         s.data = s.data;
         s.search = "";
-        //vm.tbl2Data = _.cloneDeep(s);
-        vm.tbl2DataClone = _.cloneDeep(s);
+        vm.tbl2Data = _.cloneDeep(s);
+     //   vm.tbl2DataClone = _.cloneDeep(s);
         vm.tbl2show(vm.tbl2Data,"table");
       // /vm.tbl2 = vm.hero.getrx(s);
     })
@@ -98,7 +95,25 @@ export class CustomersListComponent implements OnInit {
      return data;
   }
   ngOnInit() {
-      this.refresh();
+    let vm = this;
+      // this.refresh();
+      this.http.get("http://jsonresp.herokuapp.com/datatable").subscribe(r =>{
+        vm.sub = this.hero.getrx(r);
+      })
+      
+  }
+  change(data,id){
+    let vm = this;
+    if(id === 'row'){
+      this.http.get("http://jsonresp.herokuapp.com/datatable/"+data.row).pipe(
+          map((d:any) => { d.data = d.data.map(x => { x.flag=true; return x;}); return d; }),
+          tap(d => console.log("print=>",d))
+      ).subscribe(r =>{
+        vm.sub.ob.next(r);
+      })
+    }
+    console.log("data=>",data);
+     this.sub.ob.next(data);
   }
 
 
