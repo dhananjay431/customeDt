@@ -1,0 +1,23 @@
+<h1> table1 </h1>
+<button type="button" name="" id="" class="btn btn-primary" (click)="refresh()">
+    Refresh
+</button>
+
+<button type="button" class="btn btn-primary"  (click)="rerender()">
+    Rerender
+  </button>
+<button type="button" class="btn btn-primary"  (click)="rerenderIn()">
+    Rerender -> in
+  </button>
+
+<table 
+datatable 
+[dtOptions]="dtOptions"   
+[dtTrigger]="dtTrigger" 
+class="row-border hover">
+
+</table>
+
+
+<!-- <h1> table2 </h1>
+<table datatable [dtOptions]="dtOptions2" class="row-border hover"></table> -->

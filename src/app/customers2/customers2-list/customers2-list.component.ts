@@ -25,6 +25,11 @@ export class Customers2ListComponent implements OnInit {
       recordsTotal:0,
   recordsFiltered:0
   };
+  flag = "user";
+  
+  sh(data){
+    this.flag = data;
+  }
   data3:any;
   constructor(private http:HttpClient,private hero:HeroService) { }
 

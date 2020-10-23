@@ -1,0 +1,34 @@
+<button type="button" name="" id="" class="btn btn-primary" (click)="refresh()">
+    Refresh
+</button>
+<table datatable  class="table table-striped w-100">
+    <thead class="thead-inverse">
+        <tr>
+            <th>product</th>
+            <th>city</th>
+            <th>First Name</th>
+        </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of data.data">
+                <td scope="row"> {{d.product}}</td>
+                <td>{{d.city}}</td>
+                <td>{{d.user.firstName}}</td>
+            </tr>
+            
+        </tbody>
+</table>
+
+<!-- 
+         columns: [{
+        title: 'Product',
+        data: 'product'
+      }, {
+        title: 'city',
+        data: 'city'
+      }, {
+        title: 'First Name',
+        data: 'user.firstName'
+      }]
+
+ -->

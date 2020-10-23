@@ -2,6 +2,24 @@
     Date3 = {{  (data3.obo | async)  | json   }}
 </h1>
 
+<ul class="nav nav-tabs">
+  <li class="nav-item">
+    <a class="nav-link" [ngClass]="flag=='user' ? 'active' : ''" (click)="sh('user')">user </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [ngClass]="flag=='custome' ? 'active' : ''" (click)="sh('custome')">custome</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" [ngClass]="flag=='tenant' ? 'active' : ''" (click)="sh('tenant')">tenant</a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+  </li>
+</ul>
+<div >
+
+
+</div>
 <table id="first-table" datatable [dtOptions]="dtOptions[0]" class="row-border hover">
     <thead class="thead-inverse">
         <tr>
